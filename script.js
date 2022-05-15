@@ -3,7 +3,7 @@ const filter = document.getElementById('filter');
 const loaderEl = document.querySelector('.loader');
 
 const API_ENDPOINT = 'https://jsonplaceholder.typicode.com';
-let limit = 3;
+let limit = 5;
 let page = 1;
 
 
@@ -63,5 +63,29 @@ async function showPosts() {
 }
 
 
+// Show loader animation & fetch more posts
+function showLoading() {
+  loaderEl.classList.add('show');
+
+  setTimeout(() => {
+    loaderEl.classList.remove('show');
+
+    setTimeout(() => {
+      page++;
+      showPosts();
+    }, 300)
+  }, 1000);
+}
+
 // On page load, show initial posts
 showPosts();
+
+
+// Event Listeners
+window.addEventListener('scroll', () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+  if (scrollTop + clientHeight >= scrollHeight - 5) {
+    showLoading();
+  }
+});
