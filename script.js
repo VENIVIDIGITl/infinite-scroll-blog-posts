@@ -9,9 +9,15 @@ let page = 1;
 
 // Fetch Posts from API
 async function getPosts() {
-  const response = await fetch(`${API_ENDPOINT}/posts?_limit=${limit}&_page=${page}`);
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(`${API_ENDPOINT}/posts?_limit=${limit}&_page=${page}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    alert('Failed to fetch posts from API');
+    console.log(error);
+  }
+
 }
 
 
@@ -48,8 +54,12 @@ function createPostElement(post) {
 
 // Create and Insert post elements into DOM for each fetched post
 async function showPosts() {
-  const posts = await getPosts();
-  posts.forEach(createPostElement);
+  try {
+    const posts = await getPosts();
+    posts.forEach(createPostElement);
+  } catch (error) {
+    console.log('Failed to show posts');
+  }
 }
 
 
