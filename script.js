@@ -17,7 +17,6 @@ async function getPosts() {
     alert('Failed to fetch posts from API');
     console.log(error);
   }
-
 }
 
 
@@ -64,23 +63,27 @@ async function showPosts() {
 
 
 // Show loader animation & fetch more posts
-function showLoading() {
+function showLoadingAnimation() {
   loaderEl.classList.add('show');
 
   setTimeout(() => {
     loaderEl.classList.remove('show');
-
-    setTimeout(() => {
-      page++;
-      showPosts();
-    }, 300)
   }, 1000);
 }
 
 
 // Handle Scrolling Event
 function handleScroll() {
-  
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+  if (scrollTop + clientHeight >= scrollHeight - 5) {
+    showLoadingAnimation();
+
+    setTimeout(() => {
+      page++;
+      showPosts();
+    }, 1300);
+  }
 }
 
 
@@ -105,14 +108,6 @@ function filterPosts(event) {
 // On page load, show initial posts
 showPosts();
 
-
 // Event Listeners
-window.addEventListener('scroll', () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-  if (scrollTop + clientHeight >= scrollHeight - 5) {
-    showLoading();
-  }
-});
-
+window.addEventListener('scroll', handleScroll);
 filter.addEventListener('input', filterPosts);
