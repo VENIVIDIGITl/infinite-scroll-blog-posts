@@ -62,27 +62,27 @@ async function showPosts() {
 }
 
 
-// Show loader animation & fetch more posts
-function showLoadingAnimation() {
+// Show loader animation
+function loadingAnimation() {
   loaderEl.classList.add('show');
-
-  setTimeout(() => {
-    loaderEl.classList.remove('show');
-  }, 1000);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      loaderEl.classList.remove('show');
+      setTimeout(() => resolve('finished'), 300)
+    }, 1000);
+  });
 }
 
 
 // Handle Scrolling Event
-function handleScroll() {
+async function handleScroll() {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
+  
   if (scrollTop + clientHeight >= scrollHeight - 5) {
-    showLoadingAnimation();
-
-    setTimeout(() => {
-      page++;
-      showPosts();
-    }, 1300);
+    await loadingAnimation();
+    // Fetch more posts
+    page++;
+    showPosts();
   }
 }
 
